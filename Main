@@ -1,0 +1,46 @@
+import requests
+
+API_KEY = "0501a9823da7488f8b333843d6607adf"
+
+def fetch_articles(topic):
+    url = f"https://news.googleapis.com/news/v3/content/atom/{topic}"
+    params = {
+        "key": API_KEY,
+        "language": "en",
+        "sortby": "publishedAt"
+    }
+    
+    response = requests.get(url, params=params)
+    articles = response.json()["items"]
+    return articles
+
+def send_text_message(recipient, message):
+    # Code to send a text message using your preferred messaging service or API
+    # Implementation details will vary based on your chosen platform
+    
+    # Example implementation using Twilio
+    # from twilio.rest import Client
+    # account_sid = "your_account_sid"
+    # auth_token = "your_auth_token"
+    # client = Client(account_sid, auth_token)
+    # message = client.messages.create(
+    #     body=message,
+    #     from_="your_twilio_phone_number",
+    #     to=recipient
+    # )
+
+# Example usage
+topic = "science+technology"
+articles = fetch_articles(topic)
+
+# Extract relevant information from the articles and compose a message
+message = ""
+for article in articles:
+    title = article["title"]
+    source = article["source"]["name"]
+    url = article["url"]
+    message += f"{title} - {source}\n{url}\n\n"
+
+# Send the message to the recipient
+recipient = "+1234567890"  # Replace with the recipient's phone number
+send_text_message(recipient, message)
